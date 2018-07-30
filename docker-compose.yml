@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  pypi-server:
+    image: yen3/pypi-server:1.2.2
+    restart: always
+    command: ["-v", "-P", "/data/htpassword.txt", "--overwrite"]
+    volumes:
+      - ./packages:/data/packages
+      - ./htpassword.txt:/data/htpassword.txt
+    ports:
+      - "10080:8080"
