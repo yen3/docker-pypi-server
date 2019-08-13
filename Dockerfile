@@ -1,20 +1,17 @@
 # Original: https://github.com/pypiserver/pypiserver/blob/master/Dockerfile
-FROM python:3.6-alpine
+FROM python:3.7-alpine
 
 ADD ./entrypoint.sh /entrypoint.sh
 
 RUN apk update \
-    && apk add tzdata \
+    && apk add --virtual .build-dependencies tzdata \
     && cp /usr/share/zoneinfo/Asia/Taipei /etc/localtime \
     && echo "Asia/Taipei" >  /etc/timezone \
-    && apk del tzdata \
-    && rm -rf /var/cache/apk/* \
+    && apk del .build-dependencies \
     && adduser -S -u 9898 pypiserver \
     && addgroup -S -g 9898 pypiserver \
     && pip install --upgrade --no-cache-dir pip \
-    && pip install --no-cache-dir passlib pypiserver==1.2.4 \
-    && cd / \
-    && rm -rf /code \
+    && pip install --no-cache-dir passlib pypiserver==1.3.0 \
     && mkdir -p /data/packages
 
 VOLUME /data/packages
